@@ -40,6 +40,7 @@ import HomeContext from './home.context';
 import { HomeInitialState, initialState } from './home.state';
 
 import { v4 as uuidv4 } from 'uuid';
+import { IconArrowDown, IconCaretDown, IconPlus, IconUser } from '@tabler/icons-react';
 
 interface Props {
   serverSideApiKeyIsSet: boolean;
@@ -360,8 +361,8 @@ const Home = ({
       }}
     >
       <Head>
-        <title>Chatbot UI</title>
-        <meta name="description" content="ChatGPT but better." />
+        <title>DhiWise Playground</title>
+        <meta name="description" content="DhiWise Playground" />
         <meta
           name="viewport"
           content="height=device-height ,width=device-width, initial-scale=1, user-scalable=no"
@@ -370,7 +371,7 @@ const Home = ({
       </Head>
       {selectedConversation && (
         <main
-          className={`flex h-screen w-screen flex-col text-sm text-white dark:text-white ${lightMode}`}
+          className={`flex h-screen w-screen flex-col text-sm text-white bg-base dark:text-white ${lightMode}`}
         >
           <div className="fixed top-0 w-full sm:hidden">
             <Navbar
@@ -378,15 +379,14 @@ const Home = ({
               onNewConversation={handleNewConversation}
             />
           </div>
-
-          <div className="flex h-full w-full pt-[48px] sm:pt-0">
+          
+          <div className="flex h-full w-full flex-grow">
             <Chatbar />
-
             <div className="flex flex-1">
               <Chat stopConversationRef={stopConversationRef} />
             </div>
 
-            <Promptbar />
+            {/* <Promptbar /> */}
           </div>
         </main>
       )}

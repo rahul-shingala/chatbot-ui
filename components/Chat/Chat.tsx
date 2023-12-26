@@ -1,4 +1,4 @@
-import { IconClearAll, IconSettings } from '@tabler/icons-react';
+import { IconCaretDown, IconClearAll, IconPlus, IconSettings, IconUser } from '@tabler/icons-react';
 import {
   MutableRefObject,
   memo,
@@ -33,6 +33,11 @@ import { ModelSelect } from './ModelSelect';
 import { SystemPrompt } from './SystemPrompt';
 import { TemperatureSlider } from './Temperature';
 import { MemoizedChatMessage } from './MemoizedChatMessage';
+import Image from 'next/image';
+import Input from '../Input/Input';
+import SelectBox from '../Select/Select';
+import Link from 'next/link';
+import { Button } from '../Button/Button';
 
 interface Props {
   stopConversationRef: MutableRefObject<boolean>;
@@ -56,6 +61,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
     },
     handleUpdateConversation,
     dispatch: homeDispatch,
+    handleNewConversation,
   } = useContext(HomeContext);
 
   const [currentMessage, setCurrentMessage] = useState<Message>();
@@ -348,10 +354,39 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
   }, [messagesEndRef]);
 
   return (
-    <div className="relative flex-1 overflow-hidden bg-white dark:bg-[#343541]">
+    <div className="relative flex-1 overflow-hidden bg-white dark:bg-base">
+      {(apiKey || serverSideApiKeyIsSet) ? (<div className='flex-shrink-0 fixed z-[1] right-0 top-0 py-2 px-3 flex gap-2 w-full bg-base border-b-[1px] border-border01 justify-end'>
+        <div className='left-0 top-3 right-0 absolute mx-auto max-w-max'>
+          <Image
+            src="/main-logo-beta.svg"
+            alt="logo"
+            width={140}
+            height={30}
+          />
+        </div>
+        {selectedConversation?.messages.length !== 0 ? (
+          <button
+            className={` max-w-max flex items-center py-1.5 px-3 gap-1 bg-[rgba(255,255,255,0.10)] border-[1px] border-border01 text-xs rounded-md text-white hover:text-gray-400 dark:text-white dark:hover:text-gray-300  sm:text-neutral-700`}
+            onClick={() => {
+              handleNewConversation();
+              // handleSearchTerm('');
+            }}
+          >
+            <IconPlus size={14} />
+            New chat
+          </button>) : null}
+        {/* user profile */}
+        <Link href="https://app.dhiwise.com/account/profile" className='cursor-pointer flex items-center gap-2 py-1.5 px-3 text-xs rounded-md bg-[rgba(255,255,255,0.10)] border-[1px] border-border01'>
+          <div className='flex gap-1 items-center'>
+            <IconUser size={16} />
+            parul@dhiwise.com
+          </div>
+          <IconSettings size={14} />
+        </Link>
+      </div>) : null}
       {!(apiKey || serverSideApiKeyIsSet) ? (
-        <div className="mx-auto flex h-full w-[300px] flex-col justify-center space-y-6 sm:w-[600px]">
-          <div className="text-center text-4xl font-bold text-black dark:text-white">
+        <div className="mx-auto flex h-full w-[300px] flex-col justify-center space-y-6 sm:w-[600px] text-center items-center">
+          {/* <div className="text-center text-4xl font-bold text-black dark:text-white">
             Welcome to Chatbot UI
           </div>
           <div className="text-center text-lg text-black dark:text-white">
@@ -385,6 +420,20 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                 openai.com
               </a>
             </div>
+          </div> */}
+          <div className='w-[100px] h-[100px] bg-[#FFF] flex mb-6 justify-center items-center border-[1px] border-border01 rounded-full'>
+            <Image
+              width={50}
+              height={50}
+              src="/logo.png"
+              alt="logo"
+            />
+          </div>
+          <h1 className='text-4xl font-bold'>Get Started With DhiWise</h1>
+          <p className='text-base !mt-2 text-white opacity-80'>Build Application with DhiWise</p>
+          <div className='grid grid-cols-2 gap-2'>
+           <Button variant='secondary' label="Sign in"></Button>
+           <Button variant='primary' label="Sign up"></Button>
           </div>
         </div>
       ) : modelError ? (
@@ -392,14 +441,51 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
       ) : (
         <>
           <div
-            className="max-h-full overflow-x-hidden"
+            className={`max-h-full pt-[48px] overflow-x-hidden ${selectedConversation?.messages.length === 0 ? "h-full" : ""}`}
             ref={chatContainerRef}
             onScroll={handleScroll}
           >
             {selectedConversation?.messages.length === 0 ? (
               <>
-                <div className="mx-auto flex flex-col space-y-5 md:space-y-10 px-3 pt-5 md:pt-12 sm:max-w-[600px]">
-                  <div className="text-center text-3xl font-semibold text-gray-800 dark:text-gray-100">
+                <div className="pb-[140px] mx-auto flex flex-col h-full space-y-5 md:space-y-10 px-3 pt-5 md:pt-12 sm:max-w-[600px]">
+                  <div className='flex flex-col'>
+                    <div className='w-[100px] h-[100px] bg-[#FFF] flex mb-6 justify-center items-center border-[1px] border-border01 rounded-full'>
+                      <Image
+                        width={50}
+                        height={50}
+                        src="/logo.png"
+                        alt="logo"
+                      />
+                    </div>
+                    <h3 className='text-2xl'>DhiWise</h3>
+                    <p className='text-base text-white font-light opacity-60'>Flutter and React code generatator from Figma Designs</p>
+                  </div>
+                  <div className='w-[40rem] grid gap-8'>
+                    <div className='grid grid-cols-1 gap-6'>
+                      <SelectBox
+                        isRequired
+                        placeholder='Select Technology'
+                        selectBoxOptions={
+                          [
+                            {
+                              value: "React",
+                              label: "React"
+                            },
+                            {
+                              value: "Flutter",
+                              label: "Flutter"
+                            }
+                          ]
+                        }
+                        label='Technology' />
+                      <Input isRequired placeholder="Enter Link of Figma Frame" label="Link of Figma Frame" />
+                      <Input isRequired placeholder="Enter Figma Token" label="Figma Token" />
+                    </div>
+                    <div>
+                      <Button variant='primary' label="Submit"></Button>
+                    </div>
+                  </div>
+                  {/* <div className="text-center text-3xl font-semibold text-gray-800 dark:text-gray-100">
                     {models.length === 0 ? (
                       <div>
                         <Spinner size="16px" className="mx-auto" />
@@ -407,9 +493,14 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                     ) : (
                       'Chatbot UI'
                     )}
-                  </div>
-
-                  {models.length > 0 && (
+                  </div> */}
+                  {/* <div className='grid grid-cols-2 gap-3 w-[56rem] stretch'>
+                  <div className='cursor-pointer truncate text-sm border-border01 rounded-xl border-[1px] px-3 py-3 text-white bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.06)]'>Generate Flutter code from Figma Layout</div>
+                  <div className='cursor-pointer truncate text-sm border-border01 rounded-xl border-[1px] px-3 py-3 text-white bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.06)]'>I need Flutter code for this screen layout</div>
+                  <div className='cursor-pointer truncate text-sm border-border01 rounded-xl border-[1px] px-3 py-3 text-white bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.06)]'>Here's a Figma design, please convert to Figma code</div>
+                  <div className='cursor-pointer truncate text-sm border-border01 rounded-xl border-[1px] px-3 py-3 text-white bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.06)]'>Transform this JSON structure into Futter code</div>
+                </div> */}
+                  {/* {models.length > 0 && (
                     <div className="flex h-full flex-col space-y-4 rounded-lg border border-neutral-200 p-4 dark:border-neutral-600">
                       <ModelSelect />
 
@@ -434,12 +525,12 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                         }
                       />
                     </div>
-                  )}
+                  )} */}
                 </div>
               </>
             ) : (
               <>
-                <div className="sticky top-0 z-10 flex justify-center border border-b-neutral-300 bg-neutral-100 py-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200">
+                {/* <div className="sticky top-0 z-10 flex justify-center border border-b-neutral-300 bg-neutral-100 py-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200">
                   {t('Model')}: {selectedConversation?.model.name} | {t('Temp')}
                   : {selectedConversation?.temperature} |
                   <button
@@ -454,14 +545,14 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                   >
                     <IconClearAll size={18} />
                   </button>
-                </div>
-                {showSettings && (
+                </div> */}
+                {/* {showSettings && (
                   <div className="flex flex-col space-y-10 md:mx-auto md:max-w-xl md:gap-6 md:py-3 md:pt-6 lg:max-w-2xl lg:px-0 xl:max-w-3xl">
                     <div className="flex h-full flex-col space-y-4 border-b border-neutral-200 p-4 dark:border-neutral-600 md:rounded-lg md:border">
                       <ModelSelect />
                     </div>
                   </div>
-                )}
+                )} */}
 
                 {selectedConversation?.messages.map((message, index) => (
                   <MemoizedChatMessage
@@ -482,28 +573,28 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                 {loading && <ChatLoader />}
 
                 <div
-                  className="h-[162px] bg-white dark:bg-[#343541]"
+                  className="h-[162px] listitem bg-white dark:bg-base"
                   ref={messagesEndRef}
                 />
               </>
             )}
           </div>
-
-          <ChatInput
-            stopConversationRef={stopConversationRef}
-            textareaRef={textareaRef}
-            onSend={(message, plugin) => {
-              setCurrentMessage(message);
-              handleSend(message, 0, plugin);
-            }}
-            onScrollDownClick={handleScrollDown}
-            onRegenerate={() => {
-              if (currentMessage) {
-                handleSend(currentMessage, 2, null);
-              }
-            }}
-            showScrollDownButton={showScrollDownButton}
-          />
+          {selectedConversation?.messages.length !== 0 ? (
+            <ChatInput
+              stopConversationRef={stopConversationRef}
+              textareaRef={textareaRef}
+              onSend={(message, plugin) => {
+                setCurrentMessage(message);
+                handleSend(message, 0, plugin);
+              }}
+              onScrollDownClick={handleScrollDown}
+              onRegenerate={() => {
+                if (currentMessage) {
+                  handleSend(currentMessage, 2, null);
+                }
+              }}
+              showScrollDownButton={showScrollDownButton}
+            />) : null}
         </>
       )}
     </div>
