@@ -103,7 +103,7 @@ export const ConversationComponent = ({ conversation }: Props) => {
   return (
     <div className="relative flex items-center">
       {isRenaming && selectedConversation?.id === conversation.id ? (
-        <div className="flex w-full items-center gap-3 rounded-lg bg-[#343541]/90 p-3">
+        <div className="flex w-full items-center gap-3 rounded-lg bg-base/90 p-3">
           <IconMessage size={18} />
           <input
             className="mr-12 flex-1 overflow-hidden overflow-ellipsis border-neutral-400 bg-transparent text-left text-[12.5px] leading-3 text-white outline-none focus:border-neutral-100"
@@ -116,11 +116,11 @@ export const ConversationComponent = ({ conversation }: Props) => {
         </div>
       ) : (
         <button
-          className={`flex w-full cursor-pointer items-center gap-3 rounded-lg p-3 text-sm transition-colors duration-200 hover:bg-[#343541]/90 ${
+          className={`flex w-full cursor-pointer items-center gap-3 rounded-[4px] p-3 text-sm transition-colors duration-200 hover:bg-base/90 ${
             messageIsStreaming ? 'disabled:cursor-not-allowed' : ''
           } ${
             selectedConversation?.id === conversation.id
-              ? 'bg-[#343541]/90'
+              ? 'bg-[rgba(255,255,255,0.10)]'
               : ''
           }`}
           onClick={() => handleSelectConversation(conversation)}
@@ -128,7 +128,7 @@ export const ConversationComponent = ({ conversation }: Props) => {
           draggable="true"
           onDragStart={(e) => handleDragStart(e, conversation)}
         >
-          <IconMessage size={18} />
+          {/* <IconMessage size={18} /> */}
           <div
             className={`relative max-h-5 flex-1 overflow-hidden text-ellipsis whitespace-nowrap break-all text-left text-[12.5px] leading-3 ${
               selectedConversation?.id === conversation.id ? 'pr-12' : 'pr-1'
@@ -143,10 +143,10 @@ export const ConversationComponent = ({ conversation }: Props) => {
         selectedConversation?.id === conversation.id && (
           <div className="absolute right-1 z-10 flex text-gray-300">
             <SidebarActionButton handleClick={handleConfirm}>
-              <IconCheck size={18} />
+              <IconCheck size={16} />
             </SidebarActionButton>
             <SidebarActionButton handleClick={handleCancel}>
-              <IconX size={18} />
+              <IconX size={16} />
             </SidebarActionButton>
           </div>
         )}
@@ -156,10 +156,10 @@ export const ConversationComponent = ({ conversation }: Props) => {
         !isRenaming && (
           <div className="absolute right-1 z-10 flex text-gray-300">
             <SidebarActionButton handleClick={handleOpenRenameModal}>
-              <IconPencil size={18} />
+              <IconPencil size={16} />
             </SidebarActionButton>
             <SidebarActionButton handleClick={handleOpenDeleteModal}>
-              <IconTrash size={18} />
+              <IconTrash size={16} />
             </SidebarActionButton>
           </div>
         )}

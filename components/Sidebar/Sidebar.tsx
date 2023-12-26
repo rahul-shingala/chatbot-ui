@@ -57,11 +57,16 @@ const Sidebar = <T,>({
   return isOpen ? (
     <div>
       <div
-        className={`fixed top-0 ${side}-0 z-40 flex h-full w-[260px] flex-none flex-col space-y-2 bg-[#202123] p-2 text-[14px] transition-all sm:relative sm:top-0`}
+        className={`fixed top-0 ${side}-0 z-40 flex h-full w-[260px] flex-none flex-col space-y-2 bg-[#000] p-2 text-[14px] transition-all sm:relative sm:top-0`}
       >
-        <div className="flex items-center">
-          <button
-            className="text-sidebar flex w-[190px] flex-shrink-0 cursor-pointer select-none items-center gap-3 rounded-md border border-white/20 p-3 text-white transition-colors duration-200 hover:bg-gray-500/10"
+        <div className="flex items-center gap-2">
+          <Search
+            placeholder={t('Search...') || ''}
+            searchTerm={searchTerm}
+            onSearch={handleSearchTerm}
+          />
+          {/* <button
+            className="flex flex-shrink-0 cursor-pointer select-none items-center gap-3 rounded-[4px] bg-[rgba(255,255,255,0.20)] p-2.5 text-white transition-colors duration-200 hover:bg-gray-500/10"
             onClick={() => {
               handleCreateItem();
               handleSearchTerm('');
@@ -69,27 +74,22 @@ const Sidebar = <T,>({
           >
             <IconPlus size={16} />
             {addItemButtonTitle}
-          </button>
+          </button> */}
 
-          <button
+          {/* <button
             className="ml-2 flex flex-shrink-0 cursor-pointer items-center gap-3 rounded-md border border-white/20 p-3 text-sm text-white transition-colors duration-200 hover:bg-gray-500/10"
             onClick={handleCreateFolder}
           >
             <IconFolderPlus size={16} />
-          </button>
+          </button> */}
         </div>
-        <Search
-          placeholder={t('Search...') || ''}
-          searchTerm={searchTerm}
-          onSearch={handleSearchTerm}
-        />
 
         <div className="flex-grow overflow-auto">
-          {items?.length > 0 && (
-            <div className="flex border-b border-white/20 pb-2">
+          {/* {items?.length > 0 && (
+            <div className="flexpb-2">
               {folderComponent}
             </div>
-          )}
+          )} */}
 
           {items?.length > 0 ? (
             <div
@@ -116,7 +116,10 @@ const Sidebar = <T,>({
       <CloseSidebarButton onClick={toggleOpen} side={side} />
     </div>
   ) : (
+    <div>
+      
     <OpenSidebarButton onClick={toggleOpen} side={side} />
+    </div>
   );
 };
 

@@ -25,6 +25,7 @@ import ChatbarContext from './Chatbar.context';
 import { ChatbarInitialState, initialState } from './Chatbar.state';
 
 import { v4 as uuidv4 } from 'uuid';
+import { UserInfo } from './components/UserInfor';
 
 export const Chatbar = () => {
   const { t } = useTranslation('sidebar');
@@ -34,7 +35,7 @@ export const Chatbar = () => {
   });
 
   const {
-    state: { conversations, showChatbar, defaultModelId, folders, pluginKeys },
+    state: { conversations, showChatbar, defaultModelId, folders, pluginKeys,apiKey, serverSideApiKeyIsSet},
     dispatch: homeDispatch,
     handleCreateFolder,
     handleNewConversation,
@@ -219,9 +220,10 @@ export const Chatbar = () => {
         handleApiKeyChange,
       }}
     >
+    {(apiKey || serverSideApiKeyIsSet) ? ( 
       <Sidebar<Conversation>
         side={'left'}
-        isOpen={showChatbar}
+        isOpen={!showChatbar}
         addItemButtonTitle={t('New chat')}
         itemComponent={<Conversations conversations={filteredConversations} />}
         folderComponent={<ChatFolders searchTerm={searchTerm} />}
@@ -234,8 +236,9 @@ export const Chatbar = () => {
         handleCreateItem={handleNewConversation}
         handleCreateFolder={() => handleCreateFolder(t('New folder'), 'chat')}
         handleDrop={handleDrop}
-        footerComponent={<ChatbarSettings />}
-      />
+        // footerComponent={<ChatbarSettings />}
+        // footerComponent={<UserInfo/>}
+      />) : null}
     </ChatbarContext.Provider>
   );
 };
